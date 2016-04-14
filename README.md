@@ -13,6 +13,7 @@ For build the project for android type the next commands:
 Make sure you have the path of android ant and tools of the sdk in your .bashrc:
 
 export PATH=$PATH:/PATH_TO_SDK/android-sdk-linux/tools/ant
+
 export PATH=$PATH:/PATH_TO_SDK/android-sdk-linux/tools
 
 once you have the paths type the next command inside the project directory:
