@@ -1,0 +1,23 @@
+<ion-modal-view title="Layer">
+    <ion-header-bar>
+        <h1 class="title">Polygon Detail</h1>
+        <div class="buttons">
+            <button ng-click="updateCurrentPolygon()" class="button button-icon icon ion-ios-download-outline"></button>
+        </div>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <div class="list">
+            <label class="item item-input item-select" ng-repeat="(key,value) in currentProperties">
+                <div class="input-label">
+                    {{key}}
+                </div>
+                <select ng-if=" checkLength(key) !==0 " ng-model="currentProperties[key]">
+                    <option ng-repeat="(keyv, valuev) in dicValues[currentID] " ng-selected="valuev===value" value="{{valuev}}">{{valuev}}</option>
+                </select>
+                <label ng-if="checkLength(key)===0 " class="item item-input ">
+                    <input type="text" style="text-align:right;" name="{{value}}" ng-model="currentProperties[key]">
+                </label>
+            </label>
+        </div>
+    </ion-content>
+</ion-modal-view>

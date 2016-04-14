@@ -1,0 +1,91 @@
+.bar-header {
+    /*just an example*/
+    background-color: #a0ce4e !important;
+}
+
+.bar.bar-dark {
+    border-color: #111 !important;
+    background-color: #777777 !important;
+    background-image: linear-gradient(0deg, #111, #111 50%, transparent 50%) !important;
+    color: #fff;
+}
+
+.button-full {
+    background-color: #a0ce4e !important;
+    color: white !important;
+}
+
+.material-icons {
+    line-height: inherit;
+}
+
+.md-button.md-fab {
+    background-color: #a0ce4e !important;
+    color: #444 !important;
+}
+
+.md-fab {
+    background-color: #a0ce4e !important;
+    color: #444 !important;
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    /* Preferred icon size */
+    display: inline-block;
+    line-height: inherit;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+}
+
+ion-radio.checked {
+    background-color: #a0ce4e;
+}
+
+.button-rasor {
+    background-color: #777777 !important;
+    color: white;
+}
+
+
+/*.item-select select {
+    -moz-appearance: none;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    padding: 0px 45px 0px 0px;
+    max-width: 100%;
+    background: #FFF none repeat scroll 0% 0%;
+    color: #333;
+    text-indent: 0.01px;
+    text-overflow: "";
+    white-space: nowrap;
+    font-size: 14px;
+    cursor: pointer;
+    direction: rtl;
+}
+
+.item-select {
+    height: 100%;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+.item-input {
+    padding: 0 0 0 0;
+}*/

@@ -1,0 +1,48 @@
+<ion-view view-title="New Project">
+    <ion-content>
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" style="height:100%">
+            <ion-slide>
+                <div class="list">
+                    <label class="item item-input">
+                        <input placeholder="Title" type="text" ng-model="project.fileName">
+                    </label>
+                    <label class="item item-input" ng-model="project.metadata.date">
+                        <span class="input-label">Date</span>
+                        <div>{{project.metadata.date | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                    </label>
+                    <label class="item item-input">
+                        <div class="input-label">Type of layer:</div>
+                        <div>
+                            <ion-radio ng-selected="Exposure" ng-model="project.metadata.type" ng-value="Exposure">Exposure</ion-radio>
+                        </div>
+                    </label>
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Category
+                        </div>
+                        <select ng-options="category.name for category in categories" ng-model="project.metadata.category">
+                            <option></option>
+                        </select>
+                    </label>
+                </div>
+            </ion-slide>
+            <ion-slide>
+                <div class="list">
+                    <label class="item title">
+                        HAZARDS
+                    </label>
+                    <ion-checkbox ng-model="project.metadata.hazards[hazard.name]" ng-repeat="hazard in hazards">{{hazard.name}}</ion-checkbox>
+                </div>
+            </ion-slide>
+            <ion-slide>
+                <label class="item title">
+                    IMPACT TYPES
+                </label>
+                <ion-checkbox ng-model="project.metadata.impacts[impact.name]" ng-repeat="impact in impactTypes">{{impact.name}}</ion-checkbox>
+                <label class="item">
+                    <button class="button button-block button-positive button-rasor" ng-click="saveNewProject()">Finish</button>
+                </label>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-view>

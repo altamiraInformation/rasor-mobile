@@ -1,0 +1,22 @@
+<ion-modal-view title="Layer Info">
+    <ion-header-bar>
+        <h1 class="title">Layer Info</h1>
+    </ion-header-bar>
+    <ion-content class="padding">
+        <ion-list>
+            <ion-item>
+                Title: {{project.title}}
+            </ion-item>
+            <ion-item>
+                Owner: {{project.owner__username}}
+            </ion-item>
+            <ion-item>
+                Date: {{project.date}}
+            </ion-item>
+            <ion-item>
+                Type: {{project.csw_type}}
+            </ion-item>
+        </ion-list>
+        <button class="button button-block button-calm button-rasor" ng-click="closeInfoLayerModal()">Close</button>
+    </ion-content>
+</ion-modal-view>

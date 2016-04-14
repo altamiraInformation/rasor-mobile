@@ -1,0 +1,14 @@
+<ion-view>
+    <ion-nav-buttons side="right">
+        <button ng-click="saveToLocal()" class="button button-icon icon ion-ios-download-outline"></button>
+        <button ng-click="locate()" class="button button-icon icon ion-pinpoint"></button>
+    </ion-nav-buttons>
+    <ion-content>
+        <div data-tap-disabled="true" style="height: 100%;">
+            <leaflet height="100%" defaults="defaults" markers="markers" center="center" geojson="geojson" tap="true"></leaflet>
+        </div>
+    </ion-content>
+    <ion-footer-bar align-title="center" class="bar-dark">
+        <h1 class="title">{{project.fileName}}</h1>
+    </ion-footer-bar>
+</ion-view>

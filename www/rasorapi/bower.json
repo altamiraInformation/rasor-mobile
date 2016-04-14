@@ -1,0 +1,12 @@
+{
+  "name": "HelloIonic",
+  "private": "true",
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.2.4"
+  },
+  "dependencies": {
+    "ionic-ajax-interceptor": "~1.0.2",
+    "ng-material-floating-button": "ng-mfb#~0.6.2",
+    "polymer-slidenav": "~0.1.7"
+  }
+}

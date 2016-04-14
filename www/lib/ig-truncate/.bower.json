@@ -1,0 +1,23 @@
+{
+  "name": "ig-truncate",
+  "version": "0.1.4",
+  "main": "dist/igTruncate.js",
+  "ignore": [
+    "node_modules",
+    "src",
+    "bower.json",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "homepage": "https://github.com/igreulich/angular-truncate",
+  "_release": "0.1.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.4",
+    "commit": "b820bc75804f5b0e8eb18515f280207f64e61041"
+  },
+  "_source": "git://github.com/igreulich/angular-truncate.git",
+  "_target": "~0.1.4",
+  "_originalSource": "igTruncate",
+  "_direct": true
+}
