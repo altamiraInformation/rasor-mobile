@@ -195,8 +195,8 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
                         newProperties[$scope.dicAtt['_rc_' + id]] = translateProperty(id, feature.properties[property]);
                     }
                     if (property.indexOf("indicat") > -1) {
-                        var indicatorID = property.substr(property.length - 1);
-                        if (!isNaN(indicatorID) && indicatorID > 0) {
+                        var indicatorID = property.replace( /^\D+/g, '');
+                        if (!isNaN(indicatorID) && indicatorID > 0 && dicIndicators.hasOwnProperty(indicatorID)) {
                             newProperties[dicIndicators[indicatorID].name] = feature.properties[property];
                         }
                     }
@@ -204,8 +204,6 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
             }
             return newProperties;
         }
-
-
 
         /**
          * Updates the current feature and current properties depending on where the user clicked on the map
@@ -380,6 +378,7 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
             }
             if (geojson.features.length === 0) {
                 computeNewProps(geojson.metadata.category.id);
+                $scope.locate();
             } else {
                 templateNewProps = angular.copy(geojson.features[0].properties);
                 for (var i in templateNewProps) {
@@ -406,9 +405,9 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
          */
         var init = function() {
             if ($scope.online === true) {
-                $scope.project = ProjectsService.getProject($scope.name);
+                $scope.project = ProjectsService.getOnlineProject($scope.name);
                 if ($scope.project === undefined) {
-                    $state.go("app.projects");
+                    $state.go("app.projects?typeLayer=exposure");
                 } else {
                     var deturl = $scope.project.detail_url;
                     var arr = deturl.split("/geonode%3A");

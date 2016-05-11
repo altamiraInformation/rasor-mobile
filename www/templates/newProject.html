@@ -10,11 +10,9 @@
                         <span class="input-label">Date</span>
                         <div>{{project.metadata.date | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
                     </label>
-                    <label class="item item-input">
-                        <div class="input-label">Type of layer:</div>
-                        <div>
-                            <ion-radio ng-selected="Exposure" ng-model="project.metadata.type" ng-value="Exposure">Exposure</ion-radio>
-                        </div>
+                    <label class="item item-radio">
+                        <ion-radio ng-selected="selected" ng-model="project.metadata.type" value = "Exposure">Exposure</ion-radio>
+                        <ion-radio  ng-model="project.metadata.type" value = "Damage" >Damage</ion-radio>
                     </label>
                     <label class="item item-input item-select">
                         <div class="input-label">

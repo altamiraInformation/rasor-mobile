@@ -45,7 +45,7 @@ angular.module('starter', ['ionic', 'leaflet-directive', 'ngCordova', 'igTruncat
     })
 
     .state('app.projects', {
-        url: '/projects',
+        url: '/projects?typeLayer',
         views: {
             'menuContent': {
                 templateUrl: 'templates/projects.html',
@@ -55,7 +55,7 @@ angular.module('starter', ['ionic', 'leaflet-directive', 'ngCordova', 'igTruncat
     })
 
     .state('app.project', {
-        url: '/projects/:identifier?{online:bool}',
+        url: '/project/:identifier?{online:bool}',
         views: {
             'menuContent': {
                 templateUrl: 'templates/project.html',
@@ -112,5 +112,5 @@ angular.module('starter', ['ionic', 'leaflet-directive', 'ngCordova', 'igTruncat
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/projects');
+    $urlRouterProvider.otherwise('/app/projects?typeLayer=exposure');
 });

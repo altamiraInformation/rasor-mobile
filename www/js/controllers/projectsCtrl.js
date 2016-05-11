@@ -1,11 +1,11 @@
-angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading', 'ProjectsService', '$timeout', '$cordovaFile', '$ionicPopup', '$rootScope', '$http', 'ConfigService', '$state',
+angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading', 'ProjectsService', '$timeout', '$cordovaFile', '$ionicPopup', '$rootScope', '$http', 'ConfigService', '$state'
+    ,'$stateParams','$cordovaGeolocation',
+    function($scope, $ionicLoading, ProjectsService, $timeout, $cordovaFile, $ionicPopup, $rootScope, $http, ConfigService, $state, $stateParams,$cordovaGeolocation) {
 
-    function($scope, $ionicLoading, ProjectsService, $timeout, $cordovaFile, $ionicPopup, $rootScope, $http, ConfigService, $state) {
-
-        $scope.projects = ProjectsService.getProjects();
         $scope.ProjectsService = ProjectsService;
 
-        var initvalues = false;
+        //var initvalues = false;
+        $scope.geoFilter ={};
 
         /**
          * Alert for raster files
@@ -18,13 +18,68 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
             });
         }
 
+        var successFilteredLayers = function(response){
+            console.log(response.objects);
+            if($scope.typeLayer === "exposure"){
+                $scope.exposureProjects = response.objects;
+            }
+            if($scope.typeLayer === "damage"){
+                $scope.damageProjects = response.objects;                
+            }
+        }
+
+        var errorFileteredLayers = function(error){
+            console.log("errorrrrr ", error);
+        }
+
+        var displayFilteredLayers = function(){
+            $cordovaGeolocation
+                .getCurrentPosition()
+                .then(function(position) {
+                    var pt = {
+                        "type" : "Feature",
+                        "properties" : {},
+                        "geometry" : {
+                            "type" : "Point",
+                            "coordinates" : [position.coords.longitude, position.coords.latitude]
+                        }
+                    };
+                    var unit = 'meters';
+                    var buffered = turf.buffer(pt, 500, unit);
+                    console.log("buffered", buffered);
+                    var result = turf.extent(buffered);
+                    console.log("result!!!!", result);
+                    var getFilteredLayersPromise = ProjectsService.getFilteredLayers($scope.typeLayer, result);
+                    getFilteredLayersPromise.success(successFilteredLayers).error(errorFileteredLayers);
+
+                }, function(err) {
+                    // error
+                    console.log("Location error!");
+                    console.log(err);
+                });
+        }
+
+        $scope.changeGeoFilter = function(){
+            if($scope.geoFilter.value === true){
+                displayFilteredLayers();
+            }
+            else{
+                if($scope.typeLayer === "exposure"){
+                    $scope.exposureProjects = ProjectsService.getProjects();
+                }
+                else if($scope.typeLayer === "damage"){
+                    $scope.damageProjects = ProjectsService.getDamageProjects();
+                }
+            }
+        }
+
         /**
          * Check if the project is a raster file , if it's not then change state to display the layer on the map,
          *  else display a popup
          * @param  {[type]} name [name of the project to open]
          */
         $scope.checkIfRaster = function(name) {
-            var project = ProjectsService.getProject(name);
+            var project = ProjectsService.getProject(name,$scope.typeLayer);
             var checkRasterPromise = ProjectsService.checkIfRaster(project.id);
             checkRasterPromise.then(function(response) {
                 if (response.data.is_raster === false) {
@@ -32,24 +87,38 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
                 } else displayRasterPopup();
             });
         }
-
         /*FUNCTIONS OF SUCCESS QUERIES!!!!=================>*/
 
+
+        $scope.changeType = function(type){
+            $scope.typeLayer = type;
+            console.log("TYPE ", $scope.typeLayer);
+        }
+
+        var errorLoadDamage = function(error){
+            console.log(error);
+        }
         /**
          * Assign the array of projects to the service
          * @param  {[type]} response [response of the wuery]
          */
         var successLoadProjectsCallback = function(response) {
-            $scope.projects = response.objects;
-            ProjectsService.setProjects($scope.projects);
+            var projects = response.objects;
+            ProjectsService.setProjects(projects);
+            $scope.exposureProjects = projects
         }
-
+        
         /*ERROR FUNCTION*/
         /**
          * Error function if the query for the projects fail
          */
         var errorloadProjectsCallback = function(err) {}
 
+        var successLoadDamage = function(response){
+            var projects = response.objects;
+            ProjectsService.setDamageProjects(projects);
+            $scope.damageProjects = projects;
+        }
 
         /**
          * Load projects to the service and to the controller
@@ -57,6 +126,8 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
         var loadProjects = function() {
             $scope.loadProjectsPromise = ProjectsService.loadProjects();
             $scope.loadProjectsPromise.success(successLoadProjectsCallback).error(errorloadProjectsCallback);
+            $scope.loadDamagePromise = ProjectsService.loadDamageProjects();
+            $scope.loadDamagePromise.success(successLoadDamage).error(errorLoadDamage);
         }
 
         /**
@@ -64,10 +135,12 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
          * @return {[type]} [description]
          */
         var loadValues = function() {
-            if (initvalues === false) {
+            if ($scope.initvalues === undefined) {
+                $scope.typeLayer = "exposure";
                 loadProjects();
-                initvalues = true;
+                $scope.initvalues = true;
             }
+            $scope.typeLayer = $stateParams.typeLayer;
         }
 
         /**

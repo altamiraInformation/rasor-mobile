@@ -4,6 +4,7 @@ angular.module('starter').factory('ProjectsService', ['$http', '$cordovaFileTran
         var server = 'http://130.251.104.198/';
         //server = 'http://localhost:1337/130.251.104.198/';
         var projects = [];
+        var damageProjects = [];
         var currentProject;
         var localProjects = [];
 
@@ -50,10 +51,30 @@ angular.module('starter').factory('ProjectsService', ['$http', '$cordovaFileTran
              * @param  {[type]} name [Name of the project]
              * @return {[type]}      [return the project from the array of project with title === name]
              */
-            getProject: function(name) {
+            getProject: function(name, typeLayer) {
+                if(typeLayer === 'exposure'){
+                    var size = projects.length;
+                    for (var i = 0; i < size; ++i) {
+                        if (projects[i].title === name) return projects[i];
+                    }
+                }
+                else if(typeLayer === 'damage'){
+                    var size = damageProjects.length;
+                    console.log("damage projects", damageProjects);
+                    for (var i = 0; i < size; ++i) {
+                        if (damageProjects[i].title === name) return damageProjects[i];
+                    }
+                }
+            },
+            getOnlineProject: function(name){
                 var size = projects.length;
                 for (var i = 0; i < size; ++i) {
                     if (projects[i].title === name) return projects[i];
+                }
+                var size = damageProjects.length;
+                //console.log("damage projects", damageProjects);
+                for (var i = 0; i < size; ++i) {
+                    if (damageProjects[i].title === name) return damageProjects[i];
                 }
             },
             /**
@@ -89,7 +110,25 @@ angular.module('starter').factory('ProjectsService', ['$http', '$cordovaFileTran
              * @return {[type]} [return result of http.get]
              */
             loadProjects: function() {
-                return $http.get(server + '/api/layers/');
+                return $http.get(server + '/api/layers/?keywords__slug__in=rasor_exposure');
+            },
+            loadDamageProjects: function(){
+                return $http.get(server + '/api/layers/?keywords__slug__in=rasor_impact');
+            },
+            setDamageProjects: function(projects){
+                damageProjects = projects;
+            },
+            getDamageProjects: function(){
+                return damageProjects;
+            },
+            getFilteredLayers: function(type, bbox){
+                var aux = [];
+                for(var i =0; i < bbox.length;++i){
+                    aux[i] = Math.round( bbox[i] );
+                }
+                //var bboxParam = bbox[0].toString()+','bbox[1].toString()+','bbox[2].toString()+','+bbox[3].toString();
+                var bboxParam = bbox[0]+','+bbox[1]+','+bbox[2]+','+bbox[3];
+                return $http.get(server + '/api/layers/?keywords__slug__in=rasor_'+type+'&extent='+bboxParam);
             },
             /**
              * make query to API to get the shapefile of given layer name

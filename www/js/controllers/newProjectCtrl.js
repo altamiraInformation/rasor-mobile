@@ -13,7 +13,7 @@ angular.module('starter').controller('NewProjectCtrl', ['$scope', '$ionicModal',
             features: [],
             metadata: {
                 date: new Date(),
-                type: 'Exposure',
+                type: '',
                 hazards: {},
                 impacts: {},
                 category: {}

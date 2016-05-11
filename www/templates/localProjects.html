@@ -1,4 +1,4 @@
-<ion-view view-title="Projects" class="rasor">
+<ion-view view-title="My Layers" class="rasor">
     <md-button class="md-fab md-fab-bottom-right" aria-label="Add" href="#/app/newProject">
         <i class="button button-icon icon ion-plus-round" style="margin-top: 7px"></i>
     </md-button>
@@ -6,7 +6,7 @@
         <ion-list>
             <ion-item ng-repeat="entry in localProjects" style="padding: 0px;">
                 <div style="float:left; width: 60%; line-height: 49px; padding-left: 10px;">
-                    <a href="#/app/projects/{{entry}}" style="display:block; color:rgb(68,68,68); text-decoration:none;">{{entry}}</a>
+                    <a href="#/app/project/{{entry}}" style="display:block; color:rgb(68,68,68); text-decoration:none;">{{entry}}</a>
                 </div>
                 <div style="float:right; background:white;">
                     <button class="button button-clear button-positive" ng-click="upload(entry, $event,$index)">

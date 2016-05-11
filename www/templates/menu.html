@@ -16,10 +16,13 @@
         <ion-content>
             <ion-list>
                 <ion-item menu-close ng-click="loadLocalProjects()" ui-sref="app.localProjects">
-                    My Projects
+                    My Layers
                 </ion-item>
-                <ion-item menu-close href="#/app/projects">
-                    Online Projects
+                <ion-item menu-close href='#/app/projects?typeLayer=exposure'>
+                    Online Exposure Layers
+                </ion-item>
+                <ion-item menu-close href='#/app/projects?typeLayer=damage'>
+                    Online Damage Layers
                 </ion-item>
             </ion-list>
         </ion-content>
