@@ -147,7 +147,6 @@ angular.module('starter').factory('ProjectsService', ['$http', '$cordovaFileTran
                     }
                 };
                 return $http.get(url, options);
-
             },
             /**
              * Save a layer in the device (local)

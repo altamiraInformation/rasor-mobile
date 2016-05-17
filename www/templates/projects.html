@@ -7,7 +7,7 @@
             <i class="icon ion-search placeholder-icon"></i>
             <input type="search" placeholder="Search" ng-focus="searchFocused = true" ng-blur="searchFocused = false" ng-model="search">
         </label>
-        <ion-checkbox ng-model="geoFilter.value" ng-change="changeGeoFilter()">Geo filter</ion-checkbox>
+        <ion-checkbox ng-model="geoFilter.value" ng-change="changeGeoFilter()">Search nearest layers</ion-checkbox>
         <ion-list ng-if="typeLayer === 'exposure' || typeLayer === undefined">
             <ion-item ng-repeat="project in exposureProjects | filter:search" ng-click="checkIfRaster(project.title)">
                 {{project.title}}

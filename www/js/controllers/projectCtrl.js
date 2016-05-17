@@ -1,8 +1,8 @@
 angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$stateParams', 'ProjectsService', '$ionicModal', '$ionicPopup',
-    '$cordovaGeolocation', 'leafletData', 'ConfigService', 'leafletMarkerEvents', '$ionicPlatform', '$ionicHistory',
+    '$cordovaGeolocation', 'leafletData', 'ConfigService', 'leafletMarkerEvents', '$ionicPlatform', '$ionicHistory', '$cordovaToast',
 
     function($scope, $state, $stateParams, ProjectsService, $ionicModal, $ionicPopup,
-        $cordovaGeolocation, leafletData, ConfigService, leafletMarkerEvents, $ionicPlatform, $ionicHistory) {
+        $cordovaGeolocation, leafletData, ConfigService, leafletMarkerEvents, $ionicPlatform, $ionicHistory,$cordovaToast) {
 
 
 
@@ -30,7 +30,9 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
         $scope.defaults = {
             tileLayer: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
             //maxZoom: 18,
-            zoomControlPosition: 'bottomright'
+            //zoomControlPosition: 'bottomright',
+            zoomControl : false,
+            drawControl: true
         };
 
         /**
@@ -69,6 +71,59 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
             }
         };
 
+        var drawControl = new L.Control.Draw({
+            draw: {
+                polygon: true,
+                rectangle: false,
+                marker: false,
+                circle: false,
+                polyline: false,
+                }
+            }
+        );
+
+        var disableZoomPopup = function(){
+            $cordovaToast.show('zoom disabled while editing polygon', 'long', 'bottom');
+        }
+
+        var enableZoomPopup = function(){
+            $cordovaToast.show('zoom enabled', 'long', 'bottom');
+        }
+
+        leafletData.getMap().then(function(map) {
+            map.addControl(drawControl);
+            map.on('draw:created', function (e) {
+                var layer = e.layer;
+                var polygon = [];
+                console.log("latlngs.length", layer._latlngs.length);
+                for (var i = 0; i < layer._latlngs.length; i++) {
+                   polygon.push([layer._latlngs[i].lng, layer._latlngs[i].lat]);
+                }
+                polygon.push([layer._latlngs[0].lng, layer._latlngs[0].lat]);
+                var newFeature = turf.polygon([polygon]);
+                console.log("layer", e.layer, newFeature);
+                newFeature.id = geojsonProject.features.length;
+                $scope.project.features.push(newFeature);
+                newFeature.properties =  angular.copy(templateNewProps);
+                geojsonProject.features.push(newFeature);
+                // Do whatever else you need to. (save to db, add to map etc)
+
+            }); 
+
+            map.on('draw:drawstart', function(e){
+                map.touchZoom.disable();
+                map.doubleClickZoom.disable();
+                disableZoomPopup();
+
+            });
+
+            map.on('draw:drawstop', function(e){
+                map.touchZoom.enable();
+                map.doubleClickZoom.enable();
+                enableZoomPopup();
+            });
+        });
+
         /**
          * Checks length of dicAtt dictionary, to see if there are posible values for the attribute or not.
          * @param  {[type]} key [property to search inside dicAtt]
@@ -95,7 +150,8 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
          * @param  {[type]} event) {                       event.preventDefault();            event.stopPropagation();            if (modalShown [description]
          * @return {[type]}        [description]
          */
-        $ionicPlatform.onHardwareBackButton(function(event) {
+        /*$ionicPlatform.onHardwareBackButton(function(event) {
+            //$ionicHistory.removeBackView();
             event.preventDefault();
             event.stopPropagation();
             if (modalShown === true) {
@@ -103,7 +159,7 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
             } else if ($ionicHistory.backView().stateName === "app.newProject" && modalShown === false) {
                 $ionicHistory.goBack(-2);
             }
-        });
+        });*/
 
         /**
          * [findTranslate description]
@@ -119,6 +175,10 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
         }
 
 
+        $scope.startPolygon = function(){
+
+
+        }
         /**
          * Translates the current properties of the feature to RC_XX/RD_XX form.
          * @return {[type]} [description]
@@ -266,7 +326,7 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
         }
 
         var errorSave = function(err) {
-            //toast
+            $cordovaToast.show('An error ocurred, please try again later', 'long', 'center');
         }
 
         /**
@@ -316,7 +376,7 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
 
 
         var errorZipCallback = function(err) {
-            console.log("ups :(");
+            $cordovaToast.show('An error ocurred, please try again later', 'long', 'center');
         }
 
         /**
@@ -339,8 +399,7 @@ angular.module('starter').controller('ProjectCtrl', ['$scope', '$state', '$state
 
                 }, function(err) {
                     // error
-                    console.log("Location error!");
-                    console.log(err);
+                    $cordovaToast.show('Location error, make sure you have GPS enabled', 'long', 'center');
                 });
 
         }
