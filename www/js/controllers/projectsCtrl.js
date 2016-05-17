@@ -19,7 +19,6 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
         }
 
         var successFilteredLayers = function(response){
-            console.log(response.objects);
             if($scope.typeLayer === "exposure"){
                 $scope.exposureProjects = response.objects;
             }
@@ -29,7 +28,7 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
         }
 
         var errorFileteredLayers = function(error){
-            console.log("errorrrrr ", error);
+            $cordovaToast.show('An error ocurred, please try again later', 'long', 'center');
         }
 
         var displayFilteredLayers = function(){
@@ -46,16 +45,13 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
                     };
                     var unit = 'meters';
                     var buffered = turf.buffer(pt, 500, unit);
-                    console.log("buffered", buffered);
                     var result = turf.extent(buffered);
-                    console.log("result!!!!", result);
                     var getFilteredLayersPromise = ProjectsService.getFilteredLayers($scope.typeLayer, result);
                     getFilteredLayersPromise.success(successFilteredLayers).error(errorFileteredLayers);
 
                 }, function(err) {
                     // error
-                    console.log("Location error!");
-                    console.log(err);
+                    $cordovaToast.show('Location error, make sure you have GPS enabled', 'long', 'center');
                 });
         }
 
@@ -96,7 +92,7 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
         }
 
         var errorLoadDamage = function(error){
-            console.log(error);
+            $cordovaToast.show('An error ocurred, please try again later', 'long', 'center');
         }
         /**
          * Assign the array of projects to the service
@@ -112,7 +108,9 @@ angular.module('starter').controller('ProjectsCtrl', ['$scope', '$ionicLoading',
         /**
          * Error function if the query for the projects fail
          */
-        var errorloadProjectsCallback = function(err) {}
+        var errorloadProjectsCallback = function(err) {
+            $cordovaToast.show('An error ocurred, please try again later', 'long', 'center');
+        }
 
         var successLoadDamage = function(response){
             var projects = response.objects;

@@ -1,0 +1,8 @@
+# Directory for cordova platforms 
+platforms
+#rasor apk
+Rasor.apk
+#rasor keystore
+my-release-key.keystore
+# Node modules folder
+node_modules
